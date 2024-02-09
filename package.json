@@ -8,7 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "airport-codes": "^1.0.2",
     "amadeus": "^5.1.0",
-    "axios": "^0.19.2",
+    "axios": "^1.6.7",
     "dotenv": "^8.2.0",
     "google-map-react": "^1.1.7",
     "google-maps-react": "^2.0.6",
@@ -21,7 +21,7 @@
     "react-new-window": "^0.1.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "3.4.1",
+    "react-scripts": "^5.0.1",
     "react-select": "^3.1.0",
     "react-spinners": "^0.9.0"
   },
