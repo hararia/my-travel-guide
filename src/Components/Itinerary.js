@@ -44,9 +44,10 @@ class Itinerary extends Component {
   };
   printFlights = () => {
     return this.props.itinerary.flights.map((flight, i) => {
+
       return (
         <div className="line">
-          <strong>{i + 1}) </strong>${flight.MinPrice} - {flight.carrier}
+          <strong>{i + 1}) </strong>${flight.totalPriceWithDecimal.price} - {flight.airlines[0].name}
           <img
             className="deleteButton"
             onClick={() => {

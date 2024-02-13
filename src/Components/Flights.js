@@ -23,7 +23,7 @@ class Flights extends Component {
     loading: false
   };
 
-  formatDate = date => {
+  formatDate = date => {  
     let returnDate = "";
     date = date.toString();
 
@@ -64,39 +64,39 @@ class Flights extends Component {
     })
     axios({
       method: "GET",
-      url: `https://sky-scanner3.p.rapidapi.com/languages`,
+      url: `https://priceline-com-provider.p.rapidapi.com/v1/flights/locations`,
       headers: {
         "content-type": "application/octet-stream",
-        'X-RapidAPI-Host': 'sky-scanner3.p.rapidapi.com',
+        'X-RapidAPI-Host': 'priceline-com-provider.p.rapidapi.com',
         'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
-        useQueryString: true
       },
       params: {
-        query: `${this.state.destCity}`
+        name: this.state.destCity
       }
     })
-      // .then(response => {
-      //   console.log(response);
-      //   axios({
-      //     method: "GET",
-      //     url: `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsedates/v1.0/US/USD/en-US/${
-      //       this.state.fromAirport
-      //     }/${response.data.Places[0].PlaceId}/${this.formatDate(
-      //       this.state.departDate
-      //     )}`,
-      //     headers: {
-      //       "content-type": "application/octet-stream",
-      //       "x-rapidapi-host":
-      //         "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-      //       "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
-      //       useQueryString: true
-      //     }
-      //   })
+      .then(response => {
+        const cityCode = response.data[0].id;
+        axios({
+          method: "GET",
+          url: 'https://priceline-com-provider.p.rapidapi.com/v1/flights/search',
+          headers: {
+            "content-type": "application/octet-stream",
+            "x-rapidapi-host":
+              "priceline-com-provider.p.rapidapi.com",
+            "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
+          },
+          params: {
+            location_arrival: cityCode,
+            date_departure: this.formatDate(this.state.departDate),
+            class_type: 'ECO',
+            location_departure: this.state.fromAirport,
+            itinerary_type: 'ONE_WAY',
+            sort_order: 'PRICE',
+          },
+        })
           .then(response => {
-            console.log(response);
             this.setState({
-              flights: response.data.Quotes,
-              carriers: response.data.Carriers,
+              flights: response.data.data.listings,
               showTable: true,
               showSrtBtns: true,
               loading:false
@@ -105,14 +105,14 @@ class Flights extends Component {
           .catch(error => {
             console.log(error);
           });
-      // })
-      // .catch(error => {
-      //   console.log(error);
-      // });
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   determineCarrier(id) {
-    for (var elem of this.state.carriers) {
+    for (const elem of this.state.carriers) {
       if (elem.CarrierId === id) return elem.Name;
     }
   }
@@ -145,18 +145,18 @@ class Flights extends Component {
     return this.state.flights.map((flight, i) => {
       return (
         <tr key={i}>
-          <td>{this.determineCarrier(flight.OutboundLeg.CarrierIds[0])}</td>
-          <td>${flight.MinPrice}</td>
-          <td>{flight.OutboundLeg.DepartureDate.slice(0, 10)}</td>
-          <td>{this.changeTime(flight.QuoteDateTime.slice(11, 16))}</td>
-          <td>{this.determineDirect(flight.Direct)}</td>
+          <td>{flight.airlines[0].name}</td>
+          <td>${flight.totalPriceWithDecimal.price}</td>
+          <td>{new Date(flight.slices[0].segments[0].departInfo.time.dateTime).toISOString().substring(0, 10)}</td>
+          <td>{this.changeTime(flight.slices[0].segments[0].departInfo.time.dateTime.slice(11, 16))}</td>
+          <td>{flight.slices[0].segments[0].stopQuantity > 0 ? "No" : "Yes"}</td>
           <td>
             <input
               onChange={this.addToItinerary}
               type="checkbox"
-              id={flight.QuoteId}
+              id={flight.id}
               checked={this.props.itinerary.flights.find(
-                a => a.QuoteId === flight.QuoteId
+                a => a.id === flight.id
               )}
             />
           </td>
@@ -186,12 +186,12 @@ class Flights extends Component {
 
   // itinererary function
   addToItinerary = e => {
-    let clickedFlight = this.state.flights.find(f => f.QuoteId == e.target.id);
+    let clickedFlight = this.state.flights.find(f => f.id == e.target.id);
     
-    let carrier = this.determineCarrier(
-      clickedFlight.OutboundLeg.CarrierIds[0]
-    );
-    clickedFlight.carrier = carrier;
+    // let carrier = this.determineCarrier(
+    //   clickedFlight.OutboundLeg.CarrierIds[0]
+    // );
+    // clickedFlight.carrier = carrier;
 
     this.props.setItinerary("flights", clickedFlight);
   };
@@ -262,7 +262,7 @@ class Flights extends Component {
     const { selectedOption } = this.state.selectedOption;
     return (
       <div>
-     <div class="topnav">
+     <div className="topnav">
      <Link className='active' to={`/home/${this.state.destCountry}/${this.state.destCity}`}>
             My Travel Guide
           </Link>
@@ -337,13 +337,6 @@ class Flights extends Component {
                 </>
               )}
             />
-            {/* <input
-              className="airlineInput"
-              onChange={this.handleChange}
-              type="text"
-              name="fromAirport"
-              placeholder="e.g. LAX"
-            /> */}
             <div id="formDate">
               <DatePicker
                 className="datePick"

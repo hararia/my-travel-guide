@@ -33,18 +33,17 @@ class App extends Component {
       }
     }
     if (component === "flights") {
-      if (!itineraryCopy.flights.some(item => item.QuoteId === thing.QuoteId))
+      if (!itineraryCopy.flights.some(item => item.id === thing.id))
         itineraryCopy.flights.push(thing);
       else {
         let item = itineraryCopy.flights.find(
-          item => item.QuoteId === thing.QuoteId
+          item => item.id === thing.id
         );
         itineraryCopy.flights.splice(itineraryCopy.flights.indexOf(item), 1);
       }
     }
 
     if (component === "hotels") {
-      console.log('thing', thing)
       if (!itineraryCopy.hotels.some(item => item.hotelId === thing.hotelId))
         itineraryCopy.hotels.push(thing);
       else {
