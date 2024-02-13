@@ -19,21 +19,21 @@ class SingleHotel extends Component {
   componentDidMount() {
     axios({
       method: "GET",
-      url: "https://hotels4.p.rapidapi.com/properties/get-hotel-photos",
+      url: "https://priceline-com-provider.p.rapidapi.com/v1/hotels/details",
       headers: {
         "content-type": "application/octet-stream",
-        "x-rapidapi-host": "hotels4.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_HOTEL_KEY,
+        "x-rapidapi-host": "priceline-com-provider.p.rapidapi.com",
+        "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
         useQueryString: true
       },
       params: {
-        id: this.state.hotelId
+        hotel_id: this.state.hotelId
       }
     })
       .then(response => {
         console.log(response);
         this.setState({
-          images: response.data.hotelImages.splice(0, 8)
+          images: response.data.images,
         });
       })
       .catch(error => {
@@ -42,11 +42,11 @@ class SingleHotel extends Component {
   }
   showImages = () => {
     return this.state.images.map((image, i) => {
-      let s = image.baseUrl;
-      let end = s.indexOf("_");
-      let final = s.slice(0, end + 1) + "z.jpg";
+      // let s = image.baseUrl;
+      // let end = s.indexOf("_");
+      // let final = s.slice(0, end + 1) + "z.jpg";
       return (
-        <img className="imagesRoom" key={i} src={final} alt="hotel room" />
+        <img className="imagesRoom" key={i} src={image.imageUrl} alt="hotel room" />
       );
     });
   };

@@ -44,10 +44,11 @@ class App extends Component {
     }
 
     if (component === "hotels") {
-      if (!itineraryCopy.hotels.some(item => item.id === thing.id))
+      console.log('thing', thing)
+      if (!itineraryCopy.hotels.some(item => item.hotelId === thing.hotelId))
         itineraryCopy.hotels.push(thing);
       else {
-        let item = itineraryCopy.hotels.find(item => item.id === thing.id);
+        let item = itineraryCopy.hotels.find(item => item.hotelId === thing.hotelId);
         itineraryCopy.hotels.splice(itineraryCopy.hotels.indexOf(item), 1);
       }
     }

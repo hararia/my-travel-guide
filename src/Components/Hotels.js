@@ -58,8 +58,9 @@ class Hotels extends Component {
       checkOut: date
     });
   };
-  addHotel = id => {
-    this.props.setItinerary("hotels", id);
+  addHotel = hotel => {
+    console.log(hotel)
+    this.props.setItinerary("hotels", hotel);
   };
   refreshPage = () => {
     window.location.reload(false);
@@ -69,49 +70,46 @@ class Hotels extends Component {
 
     axios({
       method: "GET",
-      url: "https://hotels4.p.rapidapi.com/locations/search",
+      url: "https://priceline-com-provider.p.rapidapi.com/v1/hotels/locations",
       headers: {
         "content-type": "application/octet-stream",
-        "x-rapidapi-host": "hotels4.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_HOTEL_KEY,
+        'X-RapidAPI-Host': "priceline-com-provider.p.rapidapi.com",
+        'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
         useQueryString: true
       },
       params: {
-        locale: "en_US",
-        query: `${this.state.city} ${this.state.country}`
+        name: this.state.city,
+        search_type: 'CITY'
       }
     })
       .then(response => {
+        console.log('response1', response)
+        const cityId = response.data[0].cityID;
         this.setState({
           loading: true
         });
         setTimeout(() => {
           axios({
             method: "GET",
-            url: "https://hotels4.p.rapidapi.com/properties/list",
+            url: "https://priceline-com-provider.p.rapidapi.com/v1/hotels/search",
             headers: {
               "content-type": "application/octet-stream",
-              "x-rapidapi-host": "hotels4.p.rapidapi.com",
-              "x-rapidapi-key": process.env.REACT_APP_HOTEL_KEY,
+              'X-RapidAPI-Host': "priceline-com-provider.p.rapidapi.com",
+              'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
               useQueryString: true
             },
             params: {
-              currency: "USD",
-              locale: "en_US",
-              sortOrder: "BEST_SELLER",
-              destinationId:
-                response.data.suggestions[0].entities[0].destinationId,
-              pageNumber: "1",
-              checkIn: this.formatDate(this.state.checkIn),
-              checkOut: this.formatDate(this.state.checkOut),
-              pageSize: "50",
-              adults1: "1"
+              location_id: cityId,
+              date_checkin: this.formatDate(this.state.checkIn),
+              date_checkout: this.formatDate(this.state.checkOut),
+              sort_order: 'HDR',
+              rooms_number: '1',
             }
           })
             .then(response2 => {
-              console.log(response2);
+              console.log('response2', response2);
               this.setState({
-                hotels: response2.data.data.body.searchResults.results,
+                hotels: response2.data.hotels,
                 showList: true,
                 showForm: true,
                 loading: false
@@ -138,8 +136,8 @@ class Hotels extends Component {
   showHotels = () => {
     return this.state.hotels.map((hotel, i) => {
       let price = "*";
-      if (hotel.ratePlan !== undefined) {
-        price = hotel.ratePlan.price.exactCurrent;
+      if (hotel.ratesSummary !== undefined) {
+        price = hotel.ratesSummary.minPrice;
       }
       return (
         <tr key={i}>
@@ -149,12 +147,12 @@ class Hotels extends Component {
               className="checkBox"
               onChange={() => this.addHotel(hotel)}
               type="checkbox"
-              checked={this.props.itinerary.hotels.find(a => a.id === hotel.id)}
+              checked={this.props.itinerary.hotels.find(a => a.hotelId === hotel.hotelId)}
             />
           </td>
           <Link
             className="linkHotel"
-            to={`/${hotel.name}/${this.state.country}/${this.state.city}/${hotel.id}`}
+            to={`/${hotel.name}/${this.state.country}/${this.state.city}/${hotel.hotelId}`}
             target="_blank"
           >
             <td className="tableName">{hotel.name}</td>
@@ -165,7 +163,7 @@ class Hotels extends Component {
           <td className="table-data">
             <strong>{hotel.starRating}</strong>
           </td>
-          <td className="tableAddress">{hotel.address.streetAddress}</td>
+          <td className="tableAddress">{hotel.location.address.addressLine1}</td>
         </tr>
       );
     });
@@ -174,29 +172,29 @@ class Hotels extends Component {
     let arr = [...this.state.hotels];
     let res = arr.sort((a, b) => {
       if (
-        (a.ratePlan === undefined && b.ratePlan === undefined) ||
-        (a.ratePlan === undefined && b.ratePlan !== undefined)
+        (a.ratesSummary === undefined && b.ratesSummary === undefined) ||
+        (a.ratesSummary === undefined && b.ratesSummary !== undefined)
       )
         return 1;
       if (
-        (a.ratePlan === undefined && b.ratePlan === undefined) ||
-        (a.ratePlan !== undefined && b.ratePlan === undefined)
+        (a.ratesSummary === undefined && b.ratePlan === undefined) ||
+        (a.ratesSummary !== undefined && b.ratePlan === undefined)
       )
         return -1;
-      if (a.ratePlan !== undefined && b.ratePlan !== undefined) {
-        if (a.ratePlan.price.exactCurrent > b.ratePlan.price.exactCurrent)
+      if (a.ratesSummary !== undefined && b.ratesSummary !== undefined) {
+        if (a.ratesSummary.minPrice > b.ratesSummary.minPrice)
           return 1;
-        if (a.ratePlan.price.exactCurrent < b.ratePlan.price.exactCurrent)
+        if (a.ratePlan.ratesSummary.minPrice < b.ratePlan.ratesSummary.minPrice)
           return -1;
-        if (a.ratePlan.price.exactCurrent === 0) return 0;
+        if (a.ratePlan.ratesSummary.minPrice === 0) return 0;
       }
     });
     this.setState({
       hotels: res.sort((a, b) => {
-        if (a.ratePlan === undefined || b.ratePlan === undefined) {
+        if (a.ratesSummary === undefined || b.ratesSummary === undefined) {
           return a;
         }
-        return b.ratePlan.price.exactCurrent - a.ratePlan.price.exactCurrent;
+        return b.ratesSummary.minPrice - a.ratesSummary.minPrice;
       })
     });
   };
@@ -228,7 +226,7 @@ class Hotels extends Component {
   render() {
     return (
       <div className="hotelBack">
-        <div class="topnav">
+        <div className="topnav">
         <Link className='active' to={`/home/${this.state.country}/${this.state.city}`}>
             My Travel Guide
           </Link>

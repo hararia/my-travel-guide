@@ -25,8 +25,9 @@ class Itinerary extends Component {
   };
   printHotels = () => {
     return this.props.itinerary.hotels.map((hotel, i) => {
+      console.log(hotel)
       let price = "?";
-      if (hotel.ratePlan) price = hotel.ratePlan.price.exactCurrent;
+      if (hotel.ratesSummary) price = hotel.ratesSummary.minPrice;
 
       return (
         <div className="line">
@@ -126,7 +127,7 @@ class Itinerary extends Component {
             .join("<br />"),
           hotelText: this.props.itinerary.hotels
             .map((hotel, i) => {
-              return `${i + 1}) $${hotel.ratePlan.price.exactCurrent} - ${
+              return `${i + 1}) $${hotel.ratesSummary.minPrice} - ${
                 hotel.name
               }`;
             })
