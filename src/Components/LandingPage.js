@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import countries from "../countries.json"
+import Select from "react-select";
 import "../Styles/Landing.css";
+import { A } from "react-html-email";
 
 class LandingPage extends Component {
   state = {
@@ -9,35 +12,60 @@ class LandingPage extends Component {
     error: ""
   };
 
-  handleChange = e => {
-    e.preventDefault();
-    if (e.target.value) {
-      this.setState({
-        [e.target.name]: e.target.value
-      });
-    } else {
-      this.setState({
-        error: '"Please, enter the values!"'
-      });
-    }
-  };
+  handleChange = (value, attribute) => {
+    this.setState({[attribute]: value})};
+
   render() {
+    console.log(this.state)
+    const countryOptions = Object.entries(countries).map((country) => {return {value: country[0], label: country[0]}})
     return (
       <div className='container'>
         <div className="landingStart">
           <div className="landingStart2">
             <h1>My Travel Guide</h1>
             <div>
-            <form>
+            <form style={{
+              display: 'flex', 
+              flexDirection: 'column',
+              alignItems: 'center'
+              }}>
               <label>Where do you want to go?</label>
+              <Select
+              className="airlineInput"
+              name="country"
+              onChange={(selectedOption) => {
+                this.handleChange(selectedOption?.value ? selectedOption?.value  : '', 'country')
+              }}
+              value={this.state.country ? {value: this.state.country, label: this.state.country} : null}
+              getOptionValue={options => options.value}
+              placeholder="Destination Country"
+              options={countryOptions}
+              isClearable
+              formatOptionLabel={options => (
+                <>
+                  <span className="code">{options.label}</span>
+                </>
+              )}
+            />
               <input
-                onChange={this.handleChange}
-                type="text"
-                name="country"
-                placeholder="Destination Country"
-              />
-              <input
-                onChange={this.handleChange}
+              style={{
+                width: '32.6vw', 
+                color: 'hsl(0,0%,20%)',
+                border: 'none', 
+                fontSize: '20px', 
+                height: '36px', 
+                padding: '2px 11px',
+                borderRadius: '4px',
+                margin: '20px 0',
+              }}
+                onChange={(event) => {
+                  if (!this.state.country) {
+                    return this.handleChange('', 'city');
+                  }
+                  this.handleChange(event.target.value, 'city')
+                }}
+                value={this.state.country ? this.state.city : ''}
+                disabled={!this.state.country}
                 type="text"
                 name="city"
                 placeholder="Destination City"
