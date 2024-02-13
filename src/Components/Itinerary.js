@@ -133,7 +133,7 @@ class Itinerary extends Component {
             .join("<br />"),
           flightText: this.props.itinerary.flights
             .map((flight, i) => {
-              return `${i + 1}) $${flight.MinPrice} - ${flight.carrier}`;
+              return `${i + 1}) $${flight.totalPriceWithDecimal.price} - ${flight.airlines[0].name}`;
             })
             .join("<br />")
         },

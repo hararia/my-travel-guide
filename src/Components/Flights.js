@@ -199,8 +199,8 @@ class Flights extends Component {
   sortPrice = () => {
     let flightsCopy = [...this.state.flights];
     flightsCopy.sort((a, b) => {
-      if (a.MinPrice > b.MinPrice) return -1;
-      else if (a.MinPrice < b.MinPrice) return 1;
+      if (a.totalPriceWithDecimal.price > b.totalPriceWithDecimal.price) return -1;
+      else if (a.totalPriceWithDecimal.price < b.totalPriceWithDecimal.price) return 1;
       else return 0;
     });
     this.setState({
@@ -212,13 +212,13 @@ class Flights extends Component {
     let flightsCopy = [...this.state.flights];
     flightsCopy.sort((a, b) => {
       if (
-        this.determineCarrier(a.OutboundLeg.CarrierIds[0]) >
-        this.determineCarrier(b.OutboundLeg.CarrierIds[0])
+        a.airlines[0].name >
+        b.airlines[0].name
       )
         return 1;
       else if (
-        this.determineCarrier(a.OutboundLeg.CarrierIds[0]) <
-        this.determineCarrier(b.OutboundLeg.CarrierIds[0])
+        a.airlines[0].name <
+        b.airlines[0].name
       )
         return -1;
       else return 0;
@@ -232,13 +232,13 @@ class Flights extends Component {
     let flightsCopy = [...this.state.flights];
     flightsCopy.sort((a, b) => {
       if (
-        a.OutboundLeg.DepartureDate.slice(0, 10) >
-        b.OutboundLeg.DepartureDate.slice(0, 10)
+        new Date(a.slices[0].segments[0].departInfo.time.dateTime) >
+        new Date(b.slices[0].segments[0].departInfo.time.dateTime)
       )
         return 1;
       else if (
-        a.OutboundLeg.DepartureDate.slice(0, 10) <
-        b.OutboundLeg.DepartureDate.slice(0, 10)
+        new Date(a.slices[0].segments[0].departInfo.time.dateTime) <
+        new Date(b.slices[0].segments[0].departInfo.time.dateTime)
       )
         return -1;
       else return 0;
