@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import axios from "axios";
 // import hotels from "./hotels.json";
 import { Link } from "react-router-dom";
@@ -300,16 +300,17 @@ class Hotels extends Component {
             loading={this.state.loading}
           />
           {this.state.showList ? (
-            <div className="list">
-              <div className="buttons2">
-                <button className="buttonHotel" onClick={this.sortPrice}>
-                  Sort by price
-                </button>
-                <button className="buttonHotel" onClick={this.sortRate}>
-                  Sort by star rating
-                </button>
-              </div>
-              <table className="hotel-table">
+            <Fragment>
+            <div className="buttons2">
+            <button className="buttonHotel" onClick={this.sortPrice}>
+              Sort by price
+            </button>
+            <button className="buttonHotel" onClick={this.sortRate}>
+              Sort by star rating
+            </button>
+          </div>
+            <div className="table-wrapper">
+              <table className="flight-table">
                 <thead>
                   <tr>
                     <th>Add</th>
@@ -325,6 +326,7 @@ class Hotels extends Component {
                 * - Price is unavailable now, please call the hotel directly.
               </p>
             </div>
+            </Fragment>
           ) : (
             ""
           )}

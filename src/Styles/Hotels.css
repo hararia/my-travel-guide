@@ -23,8 +23,8 @@
   width: 100%;
 }
 .list {
-  width: fit-content;
   padding: 0 10px;
+  overflow: scroll;
 }
 .hotel-table td {
   width: fit-content;

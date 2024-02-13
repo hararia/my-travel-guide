@@ -138,8 +138,7 @@
 }
 
 .table-wrapper {
-  margin: 10px 70px 70px;
-  box-shadow: 0px 35px 50px rgba(0, 0, 0, 0.2);
+  margin: auto;
   width: 80%;
   overflow-y: scroll;
 }
@@ -207,10 +206,6 @@
   margin-top: 10px;
 }
 @media only screen and (max-width: 600px) {
-  .table-wrapper {
-    max-width: 92vw;
-    width: fit-content;
-  }
   .flights-form input {
     width: 30vw;
   }
