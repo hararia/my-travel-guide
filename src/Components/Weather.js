@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "../Styles/Weather.css";
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
 class Weather extends Component {
   state = {

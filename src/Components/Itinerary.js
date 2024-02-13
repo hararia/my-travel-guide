@@ -93,8 +93,7 @@ class Itinerary extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    const template = "template_94bpHEUq";
-    // console.log(process.env.REACT_APP_EMAILJS_USERID);
+    const template = process.env.REACT_APP_EMAILJS_TEMPLATEID;
     this.sendFeedback(
       template,
       this.sender,
@@ -114,7 +113,7 @@ class Itinerary extends Component {
   sendFeedback(templateId, senderEmail, receiverEmail, user) {
     window.emailjs
       .send(
-        "default_service",
+        process.env.REACT_APP_EMAILJS_SERVICEID,
         templateId,
         {
           senderEmail,

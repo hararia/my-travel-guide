@@ -61,41 +61,8 @@ class AboutUs extends Component {
             Home
           </Link>
         </div>
-        <h1 className="about-title">Developers</h1>
+        <h1 className="about-title">Developer</h1>
         <div className="info-section">
-          <div className="info-container">
-            <h2> Renzo Pederzoli </h2>
-            <img
-              className="profile-pic"
-              src={require("../Images/renzo-pic-strecth (2).JPG")}
-              alt="profile-pic"
-            ></img>
-            <div className="link-imgs">
-              <a target="_blank" rel="noopener noreferrer" href="https://github.com/RenzoPederzoli">
-                <i className="fa fa-github" aria-hidden="true"></i>
-              </a>
-              <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/renzop9/">
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
-          <div className="info-container">
-            <h2> Hanna Murai </h2>
-            <img
-              className="profile-pic"
-              id="hannaImg"
-              src={require("../Images/HANNA.JPG")}
-              alt="profile-pic"
-            ></img>
-            <div className="link-imgs">
-              <a target="_blank" rel="noopener noreferrer" href="https://github.com/murai1998">
-                <i className="fa fa-github" aria-hidden="true"></i>
-              </a>
-              <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/hmurai/">
-                <i class="fa fa-linkedin" aria-hidden="true"></i>
-              </a>
-            </div>
-          </div>
           <div className="info-container">
             <h2> Andrew Harari </h2>
             <img
