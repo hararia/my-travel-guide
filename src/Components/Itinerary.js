@@ -21,11 +21,9 @@ class Itinerary extends Component {
   };
   delete = (item, name) => {
     this.props.setItinerary("hotels", item);
-    console.log(this.props.setItinerary);
   };
   printHotels = () => {
     return this.props.itinerary.hotels.map((hotel, i) => {
-      console.log(hotel)
       let price = "?";
       if (hotel.ratesSummary) price = hotel.ratesSummary.minPrice;
 
@@ -145,7 +143,6 @@ class Itinerary extends Component {
         this.setState({
           formEmailSent: true
         });
-        console.log(res);
       })
       // Handle errors here however you like
       .catch(err => console.error("Failed to send feedback. Error: ", err));

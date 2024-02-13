@@ -59,7 +59,6 @@ class Hotels extends Component {
     });
   };
   addHotel = hotel => {
-    console.log(hotel)
     this.props.setItinerary("hotels", hotel);
   };
   refreshPage = () => {
@@ -83,7 +82,6 @@ class Hotels extends Component {
       }
     })
       .then(response => {
-        console.log('response1', response)
         const cityId = response.data[0].cityID;
         this.setState({
           loading: true
@@ -107,7 +105,6 @@ class Hotels extends Component {
             }
           })
             .then(response2 => {
-              console.log('response2', response2);
               this.setState({
                 hotels: response2.data.hotels,
                 showList: true,

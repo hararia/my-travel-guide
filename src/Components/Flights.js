@@ -6,7 +6,7 @@ import Itinerary from "./Itinerary";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-import { airports } from "../airports.json";
+import airports from "../airports.json";
 import SyncLoader from "react-spinners/SyncLoader";
 
 class Flights extends Component {
@@ -64,35 +64,34 @@ class Flights extends Component {
     })
     axios({
       method: "GET",
-      url: `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/US/USD/en-US/`,
+      url: `https://sky-scanner3.p.rapidapi.com/languages`,
       headers: {
         "content-type": "application/octet-stream",
-        "x-rapidapi-host":
-          "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
+        'X-RapidAPI-Host': 'sky-scanner3.p.rapidapi.com',
+        'X-RapidAPI-Key': process.env.REACT_APP_RAPIDAPI_KEY,
         useQueryString: true
       },
       params: {
         query: `${this.state.destCity}`
       }
     })
-      .then(response => {
-        console.log(response);
-        axios({
-          method: "GET",
-          url: `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsedates/v1.0/US/USD/en-US/${
-            this.state.fromAirport
-          }/${response.data.Places[0].PlaceId}/${this.formatDate(
-            this.state.departDate
-          )}`,
-          headers: {
-            "content-type": "application/octet-stream",
-            "x-rapidapi-host":
-              "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
-            "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
-            useQueryString: true
-          }
-        })
+      // .then(response => {
+      //   console.log(response);
+      //   axios({
+      //     method: "GET",
+      //     url: `https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsedates/v1.0/US/USD/en-US/${
+      //       this.state.fromAirport
+      //     }/${response.data.Places[0].PlaceId}/${this.formatDate(
+      //       this.state.departDate
+      //     )}`,
+      //     headers: {
+      //       "content-type": "application/octet-stream",
+      //       "x-rapidapi-host":
+      //         "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com",
+      //       "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
+      //       useQueryString: true
+      //     }
+      //   })
           .then(response => {
             console.log(response);
             this.setState({
@@ -106,10 +105,10 @@ class Flights extends Component {
           .catch(error => {
             console.log(error);
           });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+      // })
+      // .catch(error => {
+      //   console.log(error);
+      // });
   };
 
   determineCarrier(id) {
@@ -325,7 +324,7 @@ class Flights extends Component {
               value={selectedOption}
               getOptionValue={options => options["City/Airport"]}
               placeholder="Departure City"
-              options={airports}
+              options={airports["airports"]}
               isClearable
               formatOptionLabel={options => (
                 <>

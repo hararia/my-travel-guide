@@ -31,7 +31,6 @@ class SingleHotel extends Component {
       }
     })
       .then(response => {
-        console.log(response);
         this.setState({
           images: response.data.images,
         });
@@ -42,16 +41,12 @@ class SingleHotel extends Component {
   }
   showImages = () => {
     return this.state.images.map((image, i) => {
-      // let s = image.baseUrl;
-      // let end = s.indexOf("_");
-      // let final = s.slice(0, end + 1) + "z.jpg";
       return (
         <img className="imagesRoom" key={i} src={image.imageUrl} alt="hotel room" />
       );
     });
   };
   render() {
-    console.log(this.state.name);
     return (
       <div className="hotelBackg">
         <div className="room">
