@@ -25,8 +25,8 @@ class MapContainer extends Component {
       url: "https://wft-geo-db.p.rapidapi.com/v1/geo/countries",
       headers: {
         "content-type": "application/octet-stream",
-        "x-rapidapi-host": "wft-geo-db.p.rapidapi.com",
-        "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
+        "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+        "X-RapidAPI-Key": process.env.REACT_APP_RAPIDAPI_KEY,
         useQueryString: true
       },
       params: {
@@ -35,7 +35,6 @@ class MapContainer extends Component {
       }
     })
       .then(response => {
-        // console.log(response)
         let countryCode = response.data.data[0]?.code;
         setTimeout(() => {
           axios({
@@ -43,8 +42,8 @@ class MapContainer extends Component {
             url: "https://wft-geo-db.p.rapidapi.com/v1/geo/cities",
             headers: {
               "content-type": "application/octet-stream",
-              "x-rapidapi-host": "wft-geo-db.p.rapidapi.com",
-              "x-rapidapi-key": process.env.REACT_APP_RAPIDAPI_KEY,
+              "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
+              "X-RapidAPI-Key": process.env.REACT_APP_RAPIDAPI_KEY,
               useQueryString: true
             },
             params: {
@@ -54,7 +53,6 @@ class MapContainer extends Component {
             }
           })
             .then(response => {
-              // console.log(response)
               this.setState({
                 lat: response.data.data[0].latitude,
                 long: response.data.data[0].longitude,
@@ -72,7 +70,6 @@ class MapContainer extends Component {
   }
 
   render() {
-    // console.log(this)
     return (
       <div>
         {this.state.loading ? (
